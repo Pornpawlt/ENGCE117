@@ -1,1 +1,15 @@
+#include <stdio.h>
 
+int main() {
+    int n;
+    char text[] = "hello world";
+
+    printf("Enter number of lines: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("[%d]%s\n", i+1, text);
+    }
+
+    return 0;
+}

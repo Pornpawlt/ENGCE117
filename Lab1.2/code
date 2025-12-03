@@ -1,29 +1,30 @@
 #include <stdio.h>
 
-void   GetSet ( int x[] , int*n ) ;
+void GetSet(int arr[], int *n);
 
-int main( ){
- int d[100] , nn  ;
-   
-    GetSet( d ,  &nn );
+int main() {
+    int data[50];
+    int num;
 
- printf("num = %d\n" ,nn );
-   printf("data : ");
- for(int  i =0 ;i< nn ;i++ ){
-  printf("%d ",d[i] );
- }
- return 0 ;
+    GetSet(data, &num);
+
+    printf("จำนวนสมาชิก = %d\n", num);
+    printf("สมาชิกที่ป้อน: ");
+    for(int i=0; i<num; i++){
+        printf("%d ", data[i]);
+    }
+
+    return 0;
 }
 
-void   GetSet ( int x[] , int*n ) 
-{
- int i ;
-    printf("ใส่จำนวน: ");
-   scanf("%d",n );
+void GetSet(int arr[], int *n) {
+    int i;
 
-for( i=0 ; i< *n ; i++ ){
-  printf("ตัว %d --> ",i+1 );
- scanf("%d",&x [ i ] );
-}
+    printf("ใส่จำนวนสมาชิก: ");
+    scanf("%d", n);
 
+    for(i=0; i<*n; i++){
+        printf("ตัวที่ %d: ", i+1);
+        scanf("%d", &arr[i]);
+    }
 }

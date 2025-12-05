@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+int* Getset(int *N);
+
+int main() {
+    int *data, num;
+    data = Getset(&num);
+
+    printf("number collect:\n");
+    for (int i = 0; i < num; i++) {
+        printf("%d ", data[i]);
+    }
+
+    return 0;
+}
+
+int* Getset(int *N) {
+    static int Arr[100];   // ขนาดตายตัว แต่ return ออกมาได้
+    int i;
+
+    printf("Enter Data size : ");
+    scanf("%d", N);
+
+    for (i = 0; i < *N; i++) {
+        if (scanf("%d", &Arr[i]) != 1) {
+            return NULL;
+        }
+    }
+
+    return Arr;   // OK เพราะเป็น static
+}

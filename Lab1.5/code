@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void GetMat(int **Value, int *row, int *col);
+
+int main() {
+    int *data;
+    int m, n;
+
+    GetMat(&data, &m, &n);
+
+    free(data);
+    return 0;
+}
+
+void GetMat(int **Value, int *row, int *col) {
+    int i, a;
+
+    printf("Enter Rows and Columns: ");
+    scanf("%d %d", row, col);
+
+    *Value = (int*) malloc((*row) * (*col) * sizeof(int));
+    if (*Value == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+
+    printf("Enter %d integers:\n", (*row) * (*col));
+    for (i = 0; i < *row; i++) {
+        for (a = 0; a < *col; a++) {
+            scanf("%d", &(*Value)[i * (*col) + a]);
+        }
+    }
+
+    printf("--------------\n");
+    for (i = 0; i < *row; i++) {
+        for (a = 0; a < *col; a++) {
+            printf("%d ", (*Value)[i * (*col) + a]);
+        }
+        printf("\n");
+    }
+}

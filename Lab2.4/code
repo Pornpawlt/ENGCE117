@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+
+#define length 10
+#define word 20
+
+int MEGAMAIN() ;
+void explode( char str1[] , char split , char str2[][length] , int *count ) ;
+
+
+int main () {
+
+    MEGAMAIN() ;
+
+}
+
+
+int MEGAMAIN() {
+    char out [ word ][ length ] ;
+    int number ;
+    char Input [100] ;
+    gets (Input) ;
+    explode( Input , '/' , out , &number ) ;
+    for ( int i = 0 ; i < number ; i ++ ) {
+        printf("word[%d] = %s \n" , i , out[i] ) ;
+    }
+    printf( "word count = %d" , number ) ;
+    return 0 ;
+}
+
+void explode( char str1[] , char split , char str2[][length] , int *count ) {
+    int S = strlen(str1) ;
+    int col = 0 ;
+    int row = 0 ;
+    
+    for ( int i = 0 ; i < S ; i ++ ) {
+        if ( str1[i] == split ) {
+            str2[row][col] = '\0' ;     
+            row ++ ;
+            col = 0 ;
+        }else {
+            str2[row][col] = str1[i] ;
+            col++ ;
+        }
+    }
+
+    str2[row][col] = '\0' ;
+    *count = row + 1 ; 
+}

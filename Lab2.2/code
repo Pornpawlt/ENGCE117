@@ -1,34 +1,23 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
-char *reverse(const char *str1);
+char *reverse( char *str1 ) ;
 
-int main(void) {
-    char text[50] = "Hello World";
-    char *out;
-
-    out = reverse(text);
-    printf("%s\n", out);
-
-    free(out);
-    return 0;
+int main () {
+    char text[50] = "Hello World" ;
+    char *out ;
+    out = reverse( text ) ;
+    printf( "%s" , out) ;
+    delete [] (out) ;
+    return 0 ;
 }
 
-char *reverse(const char *str1) {
-    int S = strlen(str1);
-
-    // จองหน่วยความจำให้พอดีกับสตริง + '\0'
-    char *text = (char *)malloc((S + 1) * sizeof(char));
-
-    if (text == NULL) {
-        return NULL;
+char *reverse( char *str1 ) {
+    int S = strlen(str1) ;
+    char *text = new char[20] ;
+    for( int i = 0 ; i < S ; i ++ ) {
+        text[i] = str1[S-1-i] ;
     }
-
-    for (int i = 0; i < S; i++) {
-        text[i] = str1[S - 1 - i];
-    }
-
-    text[S] = '\0';
-    return text;
+   text[S] = '\0' ;
+   return text ;
 }

@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main() {
+    int N, i, quantity ;
+    float Price_unit, item_Cost, AllTotal = 0.0 ;
+    
+    if ( scanf("%d", &N) != 1 ) {
+        return 1 ;
+    }
+    
+    for( i = 0 ; i < N ; i++ ) {
+        scanf("%f %d", &Price_unit, &quantity ) ;
+        item_Cost = Price_unit * quantity ;
+        if( Price_unit >= 1000 ) {
+            AllTotal = AllTotal + ( item_Cost - quantity * ( Price_unit * 0.1) ) ;
+        }else {
+            AllTotal = AllTotal + item_Cost ;
+        }
+    }
+
+    printf( "Grand Total: %.2f\n" , AllTotal ) ;
+    return 0 ;
+}

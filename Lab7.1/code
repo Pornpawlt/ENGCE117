@@ -1,0 +1,125 @@
+#include <iostream>
+#include <iomanip>
+#include <cstring>
+using namespace std;
+
+struct studentNode {
+    char name[20];
+    int age;
+    char sex;
+    float gpa;
+    studentNode* next;
+};
+
+class LinkedList {
+protected:
+    studentNode *start, *now;
+
+public:
+    LinkedList() {
+        start = now = NULL;
+    }
+
+    virtual ~LinkedList() {
+        while (start != NULL) {
+            studentNode* temp = start;
+            start = start->next;
+            delete temp;
+        }
+    }
+
+    void InsNode(char n[], int a, char s, float g) {
+        studentNode* newNode = new studentNode;
+        strcpy(newNode->name, n);
+        newNode->age = a;
+        newNode->sex = s;
+        newNode->gpa = g;
+        newNode->next = NULL;
+
+        if (start == NULL) {
+            start = now = newNode;
+        } else {
+            studentNode* temp = start;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+        }
+    }
+
+    void DelNode() {
+        if (now == NULL) return;
+
+        if (now == start) {
+            studentNode* temp = start;
+            start = start->next;
+            now = start;
+            delete temp;
+        } else {
+            studentNode* prev = start;
+            while (prev->next != now)
+                prev = prev->next;
+
+            prev->next = now->next;
+            studentNode* temp = now;
+            now = prev->next;   // move to next node
+            delete temp;
+        }
+    }
+
+    void GoNext() {
+        if (now != NULL && now->next != NULL)
+            now = now->next;
+    }
+
+    virtual void ShowNode() {
+        if (start != NULL) {
+            cout << start->name << " "
+                 << start->age << " "
+                 << start->sex << " "
+                 << fixed << setprecision(2)
+                 << start->gpa << endl;
+        }
+    }
+};
+
+class NewList : public LinkedList {
+public:
+    void GoFirst() {
+        now = start;
+    }
+
+    virtual void ShowNode() {
+        if (now != NULL && start != NULL) {
+            cout << now->name << " "
+                 << start->name << endl;
+        }
+    }
+};
+
+int main() {
+    LinkedList listA;
+    NewList listB;
+    LinkedList *listC;
+
+    listA.InsNode((char*)"one", 1, 'A', 1.1);
+    listA.InsNode((char*)"two", 2, 'B', 2.2);
+    listA.InsNode((char*)"three", 3, 'C', 3.3);
+    listA.GoNext();
+    listA.ShowNode();
+
+    listB.InsNode((char*)"four", 4, 'D', 4.4);
+    listB.InsNode((char*)"five", 5, 'E', 5.5);
+    listB.InsNode((char*)"six", 6, 'F', 6.6);
+    listB.GoNext();
+    listB.DelNode();
+    listB.ShowNode();
+
+    listC = &listA;
+    listC->GoNext();
+    listC->ShowNode();
+
+    listC = &listB;
+    listC->ShowNode();
+
+    return 0;
+}

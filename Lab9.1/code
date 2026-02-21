@@ -1,0 +1,217 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct studentNode {
+    char name[20];
+    int age;
+    char sex;
+    float gpa;
+    struct studentNode *next;
+};
+
+class LinkedList {
+protected:
+    struct studentNode *start, *now;
+
+public:
+    LinkedList() {
+        start = now = NULL;
+    }
+
+    ~LinkedList() {
+        while (start != NULL) {
+            struct studentNode *temp = start;
+            start = start->next;
+            delete temp;
+        }
+    }
+
+    void InsNode(char n[], int a, char s, float g) {
+        struct studentNode *newNode =
+            (struct studentNode*)malloc(sizeof(struct studentNode));
+
+        strcpy(newNode->name, n);
+        newNode->age = a;
+        newNode->sex = s;
+        newNode->gpa = g;
+        newNode->next = NULL;
+
+        if (start == NULL) {
+            start = now = newNode;
+        } else {
+            struct studentNode *temp = start;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+        }
+    }
+
+    void DelNode() {
+        if (now == NULL) return;
+
+        if (now == start) {
+            struct studentNode *temp = start;
+            start = start->next;
+            now = start;
+            free(temp);
+        } else {
+            struct studentNode *prev = start;
+            while (prev->next != now)
+                prev = prev->next;
+
+            prev->next = now->next;
+            free(now);
+            now = prev->next;
+        }
+    }
+
+    void GoNext() {
+        if (now != NULL && now->next != NULL)
+            now = now->next;
+    }
+
+    void GoFirst() {
+        now = start;
+    }
+
+    void GoLast() {
+        if (start == NULL) return;
+        now = start;
+        while (now->next != NULL)
+            now = now->next;
+    }
+
+    void ShowAll() {
+        struct studentNode *temp = start;
+        while (temp != NULL) {
+            printf("%s %d %c %.2f\n",
+                   temp->name, temp->age,
+                   temp->sex, temp->gpa);
+            temp = temp->next;
+        }
+    }
+
+    int FindNode(char n[]) {
+        struct studentNode *temp = start;
+        while (temp != NULL) {
+            if (strcmp(temp->name, n) == 0) {
+                now = temp;
+                return 1;
+            }
+            temp = temp->next;
+        }
+        return 0;
+    }
+
+    struct studentNode *NowNode() {
+        return now;
+    }
+
+    void EditNode(char n[], int a, char s, float g) {
+        if (now != NULL) {
+            strcpy(now->name, n);
+            now->age = a;
+            now->sex = s;
+            now->gpa = g;
+        }
+    }
+};
+
+void AddData(LinkedList *ll) {
+    char name[20];
+    int age;
+    char sex;
+    float gpa;
+
+    printf("Name Age Sex GPA : ");
+    scanf("%s %d %c %f", name, &age, &sex, &gpa);
+    ll->InsNode(name, age, sex, gpa);
+}
+
+void EditData(LinkedList *ll) {
+    char name[20];
+    printf("Find Name : ");
+    scanf("%s", name);
+
+    if (ll->FindNode(name)) {
+        char n[20];
+        int age;
+        char sex;
+        float gpa;
+
+        printf("New Name Age Sex GPA : ");
+        scanf("%s %d %c %f", n, &age, &sex, &gpa);
+        ll->EditNode(n, age, sex, gpa);
+    } else {
+        printf("Not Found\n");
+    }
+}
+
+void FindData(LinkedList *ll) {
+    char name[20];
+    printf("Find Name : ");
+    scanf("%s", name);
+
+    if (ll->FindNode(name)) {
+        struct studentNode *p = ll->NowNode();
+        printf("%s %d %c %.2f\n",
+               p->name, p->age, p->sex, p->gpa);
+    } else {
+        printf("Not Found\n");
+    }
+}
+
+void readfile(LinkedList *ll) {
+    FILE *fp = fopen("data.dat", "rb");
+    if (fp == NULL) return;
+
+    struct studentNode temp;
+    while (fread(&temp, sizeof(struct studentNode), 1, fp)) {
+        ll->InsNode(temp.name, temp.age, temp.sex, temp.gpa);
+    }
+
+    fclose(fp);
+}
+
+void writefile(LinkedList *ll) {
+    FILE *fp = fopen("data.dat", "wb");
+    if (fp == NULL) return;
+
+    ll->GoFirst();
+    struct studentNode *p = ll->NowNode();
+
+    while (p != NULL) {
+        fwrite(p, sizeof(struct studentNode), 1, fp);
+        ll->GoNext();
+        p = ll->NowNode();
+    }
+
+    fclose(fp);
+}
+
+int main() {
+    LinkedList listA;
+    int menu;
+
+    readfile(&listA);
+
+    printf("Menu - (1) Add (2) Edit (3) Delete (4) Find (5) Show (0) Exit : ");
+    scanf("%d", &menu);
+
+    while (menu != 0) {
+        switch (menu) {
+            case 1: AddData(&listA); break;
+            case 2: EditData(&listA); break;
+            case 3: listA.DelNode(); break;
+            case 4: FindData(&listA); break;
+            case 5: listA.ShowAll(); break;
+        }
+
+        printf("Menu - (1) Add (2) Edit (3) Delete (4) Find (5) Show (0) Exit : ");
+        scanf("%d", &menu);
+    }
+
+    writefile(&listA);
+    return 0;
+}
